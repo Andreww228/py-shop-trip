@@ -5,7 +5,7 @@ from app.customer import Customer
 from app.shop import Shop
 
 
-def shop_trip():
+def shop_trip() -> None:
     data = {}
     with open("../app/config.json", "r") as config:
         data = json.load(config)
@@ -41,8 +41,8 @@ def shop_trip():
         cheapest_trip_cost = 0.0
         for shop in shops:
             trip_cost = (
-                    ((customer.calculate_distance(shop.location) / 100) *
-                     customer.car.fuel_consumption) * fuel_price
+                ((customer.calculate_distance(shop.location) / 100)
+                 * customer.car.fuel_consumption) * fuel_price
             ) * 2
 
             for product, amount in customer.product_cart.items():
@@ -57,10 +57,12 @@ def shop_trip():
                 cheapest_trip_cost = trip_cost
 
             trip_cost = round(trip_cost, 2)
-            print(f"{customer.name}'s trip to the {shop.name} costs {trip_cost}")
+            print(f"{customer.name}'s trip to the "
+                  f"{shop.name} costs {trip_cost}")
 
         if not cheapest_shop or cheapest_trip_cost > customer.money:
-            print(f"{customer.name} doesn't have enough money to make a purchase in any shop")
+            print(f"{customer.name} doesn't have "
+                  f"enough money to make a purchase in any shop")
             if customer_index != len(customers) - 1:
                 print("")
             continue
