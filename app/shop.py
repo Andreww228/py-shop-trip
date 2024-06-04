@@ -26,12 +26,5 @@ class Shop:
                 cost = int(cost)
             print(f"{amount} {product_name} for {cost} dollars")
 
-        # for product in customer.product_cart:
-        #     amount = customer.product_cart[product]
-        #     product_name = product + "s" if amount > 1 else product
-        #     cost = amount * self.products.get(product, 0)
-        #     total_cost += cost
-        #     print(f"{amount} {product_name} for {cost} dollars")
-
         print(f"Total cost is {total_cost} dollars")
         print("See you again!\n")

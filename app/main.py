@@ -6,19 +6,10 @@ from app.customer import Customer
 from app.shop import Shop
 
 
-def shop_trip() -> None:
-    data = {}
-    directory = os.path.dirname(os.path.abspath(__file__))
-    with open(f"{directory}/config.json", "r") as config:
-        data = json.load(config)
-
-    # Initialize data from dict
-    fuel_price = data["FUEL_PRICE"]
-    customers = []
-    shops = []
-
-    for customer in data["customers"]:
-        customers.append(Customer(
+def get_customers_from_dict(customers: dict) -> list[Customer]:
+    result = []
+    for customer in customers:
+        result.append(Customer(
             customer["name"],
             customer["product_cart"],
             customer["location"],
@@ -28,13 +19,42 @@ def shop_trip() -> None:
                 customer["car"]["fuel_consumption"]
             )
         ))
+    return result
 
-    for shop in data["shops"]:
-        shops.append(Shop(
+
+def get_shops_from_dict(shops: dict) -> list[Shop]:
+    result = []
+    for shop in shops:
+        result.append(Shop(
             shop["name"],
             shop["location"],
             shop["products"]
         ))
+    return result
+
+
+def trip_to_shop(shop: Shop,
+                 customer: Customer,
+                 trip_cost: float) -> None:
+    customer_location = customer.location
+    print(f"{customer.name} rides to {shop.name}\n")
+    customer.location = shop.location
+    shop.serve_customer(customer)
+    print(f"{customer.name} rides home")
+    customer.location = customer_location
+    customer.money -= trip_cost
+    print(f"{customer.name} now has {round(customer.money, 2)} dollars\n")
+
+
+def shop_trip() -> None:
+    directory = os.path.dirname(os.path.abspath(__file__))
+    with open(f"{directory}/config.json", "r") as config:
+        data = json.load(config)
+
+    # Initialize data from dict
+    fuel_price = data["FUEL_PRICE"]
+    customers = get_customers_from_dict(data["customers"])
+    shops = get_shops_from_dict(data["shops"])
 
     for customer_index, customer in enumerate(customers):
         print(f"{customer.name} has {customer.money} dollars")
@@ -69,14 +89,8 @@ def shop_trip() -> None:
                 print("")
             continue
 
-        customer_location = customer.location
-        print(f"{customer.name} rides to {cheapest_shop.name}\n")
-        customer.location = cheapest_shop.location
-        cheapest_shop.serve_customer(customer)
-        print(f"{customer.name} rides home")
-        customer.location = customer_location
-        customer.money -= cheapest_trip_cost
-        print(f"{customer.name} now has {round(customer.money, 2)} dollars\n")
+        trip_to_shop(cheapest_shop, customer, cheapest_trip_cost)
 
 
-shop_trip()
+if __name__ == "__main__":
+    shop_trip()
