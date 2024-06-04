@@ -1,4 +1,5 @@
 import json
+import os
 
 from app.car import Car
 from app.customer import Customer
@@ -7,8 +8,10 @@ from app.shop import Shop
 
 def shop_trip() -> None:
     data = {}
-    with open("config.json", "r") as config:
+    directory = os.path.dirname(os.path.abspath(__file__))
+    with open(f"{directory}/config.json", "r") as config:
         data = json.load(config)
+
 
     # Initialize data from dict
     fuel_price = data["FUEL_PRICE"]
