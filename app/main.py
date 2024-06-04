@@ -7,7 +7,7 @@ from app.shop import Shop
 
 def shop_trip() -> None:
     data = {}
-    with open("../app/config.json", "r") as config:
+    with open("config.json", "r") as config:
         data = json.load(config)
 
     # Initialize data from dict
