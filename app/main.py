@@ -12,7 +12,6 @@ def shop_trip() -> None:
     with open(f"{directory}/config.json", "r") as config:
         data = json.load(config)
 
-
     # Initialize data from dict
     fuel_price = data["FUEL_PRICE"]
     customers = []
